@@ -44,6 +44,34 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    extraDetails: {
+      bio: {
+        type: String,
+        trim: true,
+        maxlength: 150,
+      },
+      favoriteFood: {
+        type: String,
+        trim: true,
+      },
+      favoriteCuisine: {
+        type: String,
+        trim: true,
+      },
+      signatureDish: {
+        type: String,
+        trim: true,
+      },
+      cookingLevel: {
+        type: String,
+        enum: ["Beginner", "Intermediate", "Expert", "Chef"],
+      },
+      goToIngredient: {
+        type: String,
+        trim: true,
+      },
+      allergicTo: [String]
+    },
   },
   {
     timestamps: true,

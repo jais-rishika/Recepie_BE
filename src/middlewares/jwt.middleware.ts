@@ -4,7 +4,7 @@ import ApiError from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { JwtPayloadWithId } from "../types/auth.types";
-import { GetUser, PublicUser } from "../types/user.types";
+import { PublicUser } from "../types/user.types";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {

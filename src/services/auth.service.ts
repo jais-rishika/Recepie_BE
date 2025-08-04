@@ -52,6 +52,7 @@ export const registerUser = async (
     email,
     password,
     fullName,
+    extraDetails:{}
   });
   const createdUser = await User.findById(newUser._id).select(
     " -password -refreshToken",

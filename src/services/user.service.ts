@@ -1,64 +1,11 @@
-import { Types } from "mongoose";
-import { Follow } from "../models/follow.model.js";
+import { Path, Types } from "mongoose";
 import ApiError from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
+import { GetUserDTO } from "../DTOs/user.dto.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
+import { ExtraUserDetails, PublicUser } from "../types/user.types.js";
+import path from "path";
 
-export const getCurrUserFollowers= async(userId: Types.ObjectId)=>{
-    try {
-        const followers=await Follow.find({following: userId}).select("+follower");
-        return followers;
-    } catch (error: any) {
-        throw new ApiError(500,error.message || "Something Went Wrong")
-    }
-}
-
-export const getCurrUserFollowings= async(userId: Types.ObjectId)=>{
-    try {
-        const following=await Follow.find({follower: userId}).select("+following");
-        return following;
-    } catch (error: any) {
-        throw new ApiError(500,error.message || "Something Went Wrong")
-    }
-}
-
-export const getFollowersFollowing= async(userId: Types.ObjectId)=>{
-    try {
-        const [followCount,followingCount]=await Promise.all([Follow.countDocuments({following: userId}),Follow.countDocuments({follower: userId})])
-        return {followCount,followingCount};
-    } catch (error: any) {
-        throw new ApiError(500,error.message || "Something Went Wrong")
-    }
-}
-
-
-// follow , unfollow and block users
-
-export const followUserService= async(userId: Types.ObjectId, toFollowId: Types.ObjectId)=>{
-    try {
-        const checkExisting=await Follow.findOne({follower: userId, following: toFollowId})
-        if(checkExisting) throw new ApiError(400,"Already Followed");
-
-        const followers=await Follow.create({
-            follower: userId,
-            following: toFollowId
-        })
-
-        return followers;
-    } catch (error: any) {
-        throw new ApiError(500,error.message || "Something Went Wrong")
-    }
-}
-
-export const unfollowUserService= async(userId: Types.ObjectId, toFollowId: Types.ObjectId)=>{
-    try {
-        await Follow.findOneAndDelete({follower: userId, following: toFollowId})
-        const checkExisting=await Follow.findOne({follower: userId, following: toFollowId})
-        if(checkExisting) throw new ApiError(500,"Sorry Could ot unfollow for some reason")
-        
-    } catch (error: any) {
-        throw new ApiError(500,error.message || "Something Went Wrong")
-    }
-}
 
 export const blockUserService= async(userId: Types.ObjectId, toUnfollowId: Types.ObjectId)=>{
     try {
@@ -79,6 +26,39 @@ export const unblockUserService= async(userId: Types.ObjectId, toUnfollowId: Typ
 
         currUser.blockedUsers=currUser?.blockedUsers.filter((id)=>!id.equals(toUnfollowId))
         await currUser.save();
+    } catch (error: any) {
+        throw new ApiError(500,error.message || "Something Went Wrong")
+    }
+}
+
+export const updateUserProfile= async(user: PublicUser, profileImg: Path)=>{
+    try {
+        const uploadImage= await uploadOnCloudinary(profileImg)
+
+        if(!uploadImage) throw new ApiError(500,"Profile Upload failed")
+        
+        user.profile=uploadImage.secure_url;
+        await user.save();
+    } catch (error: any) {
+        throw new ApiError(500,error.message || "Something Went Wrong")
+    }
+}
+
+export const updateUserDetails= async(user: PublicUser, data: ExtraUserDetails )=>{
+    try {
+        if(!user.extraDetails) user.extraDetails={};
+
+        if(data.fullName?.trim()) user.fullName=data.fullName.trim();
+        if(data.bio?.trim()) user.extraDetails.bio=data.bio.trim();
+        if(data.favoriteFood?.trim()) user.extraDetails.favoriteFood=data.favoriteFood.trim();
+        if(data.favoriteCuisine?.trim()) user.extraDetails.favoriteCuisine=data.favoriteCuisine.trim();
+        if(data.signatureDish?.trim()) user.extraDetails.signatureDish=data.signatureDish.trim();
+        if(data.cookingLevel?.trim()) user.extraDetails.cookingLevel=data.cookingLevel.trim();
+        if(data.goToIngredient?.trim()) user.extraDetails.goToIngredient=data.goToIngredient.trim();
+        if(Array.isArray(data.allergicTo)) user.extraDetails.allergicTo=data.allergicTo;
+
+        
+        await user.save();
     } catch (error: any) {
         throw new ApiError(500,error.message || "Something Went Wrong")
     }

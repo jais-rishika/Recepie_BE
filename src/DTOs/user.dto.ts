@@ -8,13 +8,15 @@ export interface UserResponseDTO extends Document {
   createdAt: Date;
   updatedAt: Date;
   profile?: string | null;
-  bio?: string;
-  favoriteFood?: string;
-  favoriteCuisine?: string;
-  signatureDish?: string;
-  cookingLevel?: string;
-  goToIngredient?: string;
-  allergicTo?: string;
+  extraDetails?:{
+    bio?: string | null;
+    favoriteFood?: string | null;
+    favoriteCuisine?: string | null;
+    signatureDish?: string | null;
+    cookingLevel?: string | null;
+    goToIngredient?: string | null;
+    allergicTo?: string[] | null;
+  } | null
 }
 
 export interface GetUserDTO extends UserResponseDTO {

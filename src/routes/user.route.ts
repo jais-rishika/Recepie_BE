@@ -1,18 +1,19 @@
+import { blockUser, getCurrUser, unblockUser, getBlockedUsers, getUserByUsername, getUserByuserId, updateCurrUser, updateProfile } from "../controllers/user.controller.js";
 import { Router } from "express";
-import { blockUser, followUser, getBlockedUsers, getCurrUser, getFollowerFollowingSize, getFollowers, getFollowing, unblockUser, unfollowUser } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/jwt.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
 //secured Routes
-router.get("/get-curr-user", verifyJWT, getCurrUser);
-router.get("/get-followers", verifyJWT, getFollowers);
-router.get("/get-following", verifyJWT, getFollowing);
-router.get("/get-follow-following-count", verifyJWT, getFollowerFollowingSize);
+router.get("/get-user-profile", verifyJWT, getCurrUser);
 router.get("/blocked-users",verifyJWT,getBlockedUsers);
+router.get("/get-user/:username",getUserByUsername);
+router.get("/get-user/:userId",getUserByuserId);
 
-router.post("/follow-user",verifyJWT, followUser);
-router.post("/unfollow-user",verifyJWT,unfollowUser);
+
+router.post("/update-curr-user",verifyJWT,updateCurrUser);
+router.post("/update-user-profile",verifyJWT,upload.single("profile"),updateProfile);
 router.post("/block-user", verifyJWT, blockUser);
 router.post("/unblock-user", verifyJWT, unblockUser);
 
