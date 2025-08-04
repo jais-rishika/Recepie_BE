@@ -92,10 +92,10 @@ const RecipeSchema = new Schema(
       type: Number,
       default: 0,
     },
-    isRecipeOfTheDay: { 
-        type: Boolean, 
-        default: false 
-    }
+    isRecipeOfTheDay: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

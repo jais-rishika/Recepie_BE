@@ -33,20 +33,8 @@ const userSchema = new Schema(
     },
     profile: {
       type: String,
-      required: true,
+      required: false,
     },
-    following: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    followers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
     blockedUsers: [
       {
         type: Schema.Types.ObjectId,
@@ -73,7 +61,7 @@ userSchema.methods.isPasswordCorrect = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateAccessToken = async function () {
   const token = jwt.sign(
     {
       _id: this._id,

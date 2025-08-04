@@ -2,11 +2,13 @@
   "name": "recepie_be",
   "version": "1.0.0",
   "description": "A Receipe Website",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "format": "prettier . --write",
-    "dev": "npm run build && npm run format && nodemon -r dotenv/config  --experimental-json-modules dist/index.js",
+    "dev": "concurrently \"npm:watch\" \"nodemon -r dotenv/config --experimental-json-modules dist/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,12 +22,15 @@
   },
   "homepage": "https://github.com/jais-rishika/Recepie_BE#readme",
   "devDependencies": {
+    "@cloudinary-util/types": "^1.6.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^1.4.13",
     "@types/node": "^24.0.3",
+    "concurrently": "^9.2.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
@@ -33,6 +38,7 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
