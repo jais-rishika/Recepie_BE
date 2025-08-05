@@ -12,8 +12,8 @@ const generateAccessAndRefereshTokens = async (
     const user: GetUserDTO | null = await User.findById(userId);
     if (!user) throw new ApiError(400, "No such user exist");
 
-    const accessToken: string =await  user.generateAccessToken();
-    const refreshToken: string =await user.generateRefreshToken();
+    const accessToken: string = await user.generateAccessToken();
+    const refreshToken: string = await user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -52,7 +52,7 @@ export const registerUser = async (
     email,
     password,
     fullName,
-    extraDetails:{}
+    extraDetails: {},
   });
   const createdUser = await User.findById(newUser._id).select(
     " -password -refreshToken",
@@ -95,7 +95,7 @@ export const loginUser = async (
   const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
     curr_user._id,
   );
-  
+
   const userObj = curr_user.toObject();
   delete userObj.password;
 

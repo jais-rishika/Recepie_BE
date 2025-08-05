@@ -31,7 +31,14 @@ const RecipeSchema = new Schema(
       type: String,
       default: "",
     },
-
+    draft: {
+      type: Boolean,
+      default: true,
+    },
+    public: {
+      type: Boolean,
+      default: false,
+    },
     // Ingredients from API or user input
     ingredients: [
       {

@@ -8,7 +8,7 @@ export interface UserResponseDTO extends Document {
   createdAt: Date;
   updatedAt: Date;
   profile?: string | null;
-  extraDetails?:{
+  extraDetails?: {
     bio?: string | null;
     favoriteFood?: string | null;
     favoriteCuisine?: string | null;
@@ -16,7 +16,7 @@ export interface UserResponseDTO extends Document {
     cookingLevel?: string | null;
     goToIngredient?: string | null;
     allergicTo?: string[] | null;
-  } | null
+  } | null;
 }
 
 export interface GetUserDTO extends UserResponseDTO {

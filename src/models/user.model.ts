@@ -70,7 +70,7 @@ const userSchema = new Schema(
         type: String,
         trim: true,
       },
-      allergicTo: [String]
+      allergicTo: [String],
     },
   },
   {

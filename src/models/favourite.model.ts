@@ -7,17 +7,10 @@ const favouriteFolderSchema = new Schema(
       ref: "User",
     },
 
-    name: {
-      type: String,
-      required: true, // e.g., "Healthy", "Desserts", etc.
-      default: "favourites",
-      trim: true,
-    },
-
     recepie: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Recepie",
+        ref: "Recipe",
       },
     ],
   },
@@ -27,6 +20,6 @@ const favouriteFolderSchema = new Schema(
   },
 );
 
-favouriteFolderSchema.index({ user: 1, recipe: 1 }, { unique: true });
+favouriteFolderSchema.index({ user: 1, recepie: 1 }, { unique: true });
 
 export const Favourites = mongoose.model("Favourites", favouriteFolderSchema);

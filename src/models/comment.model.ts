@@ -2,18 +2,20 @@ import mongoose, { Schema } from "mongoose";
 
 const commentSchema = new Schema(
   {
-    user: [
-      {
+    user: {
         type: Schema.Types.ObjectId,
         ref: "User",
       },
-    ],
-    recepie: [
-      {
+    
+    recepie: {
         type: Schema.Types.ObjectId,
         ref: "Recepie",
       },
-    ],
+    
+    comment: {
+      type:String,
+      required: true,
+    },
     isPinned: {
       type: Boolean,
       default: false,
